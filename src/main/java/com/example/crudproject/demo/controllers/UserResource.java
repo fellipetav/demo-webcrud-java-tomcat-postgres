@@ -93,4 +93,12 @@ public class UserResource {
         return new ResponseEntity<User>(foundUser, HttpStatus.FOUND);
     }
 
+    @GetMapping(value = "search_name")
+    public ResponseEntity<List<User>> getUserByName(
+            @RequestParam(name = "inputedName") String inputedName) {
+
+        List<User> usersList = userRepository.searchByInexactName(inputedName.trim().toLowerCase());
+        return new ResponseEntity<List<User>>(usersList, HttpStatus.FOUND);
+    }
+
 }
