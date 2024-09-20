@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.crudproject.demo.model.entities.User;
 import com.example.crudproject.demo.model.repository.UserRepository;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 // Annotation to identify this class as a web resource controlled by a REST controller
@@ -36,11 +38,18 @@ public class UserResource {
     }
 
     @GetMapping(value = "listAll")
-    @ResponseBody
+    @ResponseBody // Returns the data bounded on the web response body
     public ResponseEntity<List<User>> listUsers() {
         
-        List<User> usersList = userRepository.findAll();
-        return new ResponseEntity<List<User>>(usersList, HttpStatus.OK);
+        List<User> usersList = userRepository.findAll(); // Requests the database
+        return new ResponseEntity<List<User>>(usersList, HttpStatus.OK); // Returns the users (the object List) in JSON
     }
 
+    @PostMapping(value = "create")
+    @ResponseBody
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        
+        User createdUser = userRepository.save(user);
+        return new ResponseEntity<User>(createdUser, HttpStatus.CREATED);
+    }
 }
