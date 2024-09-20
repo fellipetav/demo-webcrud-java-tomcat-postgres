@@ -2,6 +2,7 @@ package com.example.crudproject.demo.controllers;
 
 import java.util.List;
 
+import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,6 +73,10 @@ public class UserResource {
     @DeleteMapping(value = "delete")
     @ResponseBody
     public ResponseEntity<String> deleteUser(@RequestParam Long userId) {
+
+        if (!userRepository.existsById(userId)) {
+            return new ResponseEntity<String>("Error deleting: id does not exist.", HttpStatus.NOT_FOUND);
+        }
 
         userRepository.deleteById(userId);
         return new ResponseEntity<String>(
