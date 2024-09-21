@@ -30,16 +30,6 @@ public class UserResource {
     @Autowired
     private UserRepository userRepository;
 
-    @RequestMapping(value = "user/{name}", method = RequestMethod.GET)
-    @ResponseStatus(HttpStatus.OK)
-    public String grettingText(@PathVariable String name) {
-
-        User user = new User();
-        user.setName(name);
-        userRepository.save(user);
-        return "Hello, " + name + "!";
-    }
-
     @GetMapping(value = "list_all")
     @ResponseBody // Returns the data bounded on the web response body
     public ResponseEntity<List<User>> listUsers() {
