@@ -16,4 +16,4 @@ No need to install a Postgres on your local machine. Simply use the provided doc
 Using a database admin, such as Dbeaver (like I did) you can connect to the database pointing to the database port (using user and password etc.) as you set in the `docker-compose.yaml` file.
 
 ## Running the project
-Execute the DemoApplication.java or the Spring boot project on your favorite IDE and go to http://localhost:8080 to see the demo.
+Execute the DemoApplication.java or the Spring boot project on your favorite IDE and go to http://localhost:8081/crudproject/ to see the demo.
