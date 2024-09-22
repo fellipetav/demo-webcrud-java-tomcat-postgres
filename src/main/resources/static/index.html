@@ -37,9 +37,61 @@
         <!-- End of Field 3 -->
     </form>
 
+    <!-- Save button -->
     <button type="button" class="btn btn-primary" onclick="saveUser()">Save</button>
-    <button type="reset" class="btn btn-secondary" onclick="document.getElementById('formUserRegistering').reset()">
+
+    <!-- Reset form button -->
+    <button type="button" class="btn btn-secondary" onclick="document.getElementById('formUserRegistering').reset()">
         Reset form</button>
+
+    <!-- Open 'Search' modal button -->
+    <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#searchModal">Search user</button>
+
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="searchModalLabel">Search users</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <!-- Filter field  -->
+                        <div class="mb-3">
+                            <label for="name-to-search" class="col-form-label">Search for an user:</label>
+                            <input type="text" class="form-control" id="name-to-search"
+                                placeholder="Enter a name or a name excerpt...">
+                        </div>
+                        <!-- End of Filter field  -->
+
+                        <!-- Run search button -->
+                        <button type="button" class="btn btn-primary" onclick="onSearch()">Search</button>
+                        <!-- End of Run search button -->
+
+                        <!-- Search results table -->
+                        <table class="table" id="search-results-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Age</th>
+                                    <th scope="col">Edit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <!-- End Search results table -->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
     <script type="text/javascript">
@@ -65,9 +117,45 @@
                 }
             }).fail(
                 function (xhr, status, errorThrown) {
-                    alert("Error while registering: " + xhr.responseText);
+                    alert("Error while registering: " + xhr.status);
                 });
         }
+
+        function onSearch() {
+
+            var userNameTextToSearch = $("#name-to-search").val();
+
+            if (userNameTextToSearch != null && userNameTextToSearch.trim() != "") {
+                // search an user by name
+                $.ajax({
+                    method: "GET",
+                    url: "search_name",
+                    data: "inputedName=" + userNameTextToSearch,
+                    success: function (response) {
+                        $('#search-results-table > tbody > tr').remove();
+
+                        for (let i = 0; i < response.length; i++) {
+                            $('#search-results-table > tbody').append(
+                                '<tr><td>'
+                                + response[i].id + '</td><td>'
+                                + response[i].name + '</td><td>'
+                                + response[i].age
+                                + '</td><td><button type="button" class="btn btn-dark" onClick="onEditUser('
+                                + response[i].id + ')">Dark</button></td></tr>');
+                        }
+                    }
+                }).fail(
+                    function (xhr, status, errorThrown) {
+                        alert("Error while searching: " + xhr.status);
+                    });
+            } else {
+                
+            }
+
+
+        }
+
+        
     </script>
 
     <!-- Jquery script -->
