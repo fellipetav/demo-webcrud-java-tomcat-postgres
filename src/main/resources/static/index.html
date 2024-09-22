@@ -41,8 +41,11 @@
     <!-- Save button -->
     <button type="button" class="btn btn-primary" onclick="saveUser()">Save</button>
 
-    <!-- Edit user form button -->
+    <!-- Edit User form button -->
     <button type="button" class="btn btn-primary" onclick="editUser()">Edit</button>
+
+    <!-- Delete User form button -->
+    <button type="button" class="btn btn-danger" onclick="deleteUser()">Delete</button>
 
     <!-- Reset form button -->
     <button type="button" class="btn btn-secondary" onclick="document.getElementById('formUserRegistering').reset()">
@@ -134,6 +137,7 @@
             var userNameTextToSearch = $("#name-to-search").val();
 
             if (userNameTextToSearch != null && userNameTextToSearch.trim() != "") {
+                
                 // search an user by name
                 $.ajax({
                     method: "GET",
@@ -148,7 +152,7 @@
                                 + response[i].id + '</td><td>'
                                 + response[i].name + '</td><td>'
                                 + response[i].age
-                                + '</td><td><button type="button" class="btn btn-dark" onClick="onFillFormWithUserData('
+                                + '</td><td><button type="button" class="btn btn-dark" onclick="onFillFormWithUserData('
                                 + response[i].id + ')">Edit</button></td></tr>');
                         }
                     }
@@ -158,6 +162,27 @@
                     });
             } else {
 
+                // list all users
+                $.ajax({
+                    method: "GET",
+                    url: "list_all",
+                    success: function (response) {
+                        $('#search-results-table > tbody > tr').remove();
+
+                        for (let i = 0; i < response.length; i++) {
+                            $('#search-results-table > tbody').append(
+                                '<tr><td>'
+                                + response[i].id + '</td><td>'
+                                + response[i].name + '</td><td>'
+                                + response[i].age
+                                + '</td><td><button type="button" class="btn btn-dark" onclick="onFillFormWithUserData('
+                                + response[i].id + ')">Edit</button></td></tr>');
+                        }
+                    }
+                }).fail(
+                    function (xhr, status, errorThrown) {
+                        alert("Error while searching: " + xhr.status);
+                    });
             }
         }
 
@@ -195,13 +220,39 @@
                 }),
                 contentType: "application/json; charset-UTF-8",
                 success: function (response) {
-                    
+
                     alert("User successfully updated!");
                 }
             }).fail(
                 function (xhr, status, errorThrown) {
-                    alert("Error while registering: " + xhr.responseText);
+                    alert("Error while updating: " + xhr.responseText);
                 });
+        }
+
+        function deleteUser() {
+
+            var userId = $('#id').val();
+
+            if (userId == "") {
+                
+                alert("Error while deleting: ID cannot be empty!");
+            } else {
+
+                $.ajax({
+                    method: "DELETE",
+                    url: "delete",
+                    data: "userId=" + userId,
+                    success: function (response) {
+                        $("#id").val("");
+                        $("#name").val("");
+                        $("#age").val("");
+                        alert(response);
+                    }
+                }).fail(
+                    function (xhr, status, errorThrown) {
+                        alert("Error while deleting: " + xhr.responseText);
+                    });
+            }
         }
 
 
