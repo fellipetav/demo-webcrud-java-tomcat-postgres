@@ -67,7 +67,7 @@ public class UserResource {
     @ResponseBody
     public ResponseEntity<String> deleteUser(@RequestParam Long userId) {
 
-        if (!userRepository.existsById(userId)) {
+        if (userId == null || !userRepository.existsById(userId)) {
             return new ResponseEntity<String>("Error deleting: id does not exist.", HttpStatus.NOT_FOUND);
         }
 
