@@ -18,7 +18,7 @@
         <!-- Field 1 -->
         <div class="mb-3">
             <label for="id" class="form-label">ID</label>
-            <input type="number" class="form-control" id="id" readonly="readonly">
+            <input type="number" class="form-control" id="id" disabled readonly>
         </div>
         <!-- End of Field 1 -->
 
@@ -112,7 +112,7 @@
                 }),
                 contentType: "application/json; charset-UTF-8",
                 success: function (response) {
-                    $("#id").val(response.id);
+                    $('#id').val(response.id);
                     alert("User successfully registered!");
                 }
             }).fail(
@@ -141,7 +141,7 @@
                                 + response[i].name + '</td><td>'
                                 + response[i].age
                                 + '</td><td><button type="button" class="btn btn-dark" onClick="onEditUser('
-                                + response[i].id + ')">Dark</button></td></tr>');
+                                + response[i].id + ')">Edit</button></td></tr>');
                         }
                     }
                 }).fail(
@@ -149,13 +149,30 @@
                         alert("Error while searching: " + xhr.status);
                     });
             } else {
-                
+
             }
-
-
         }
 
-        
+        function onEditUser(userId) {
+            
+            $('#searchModal').modal('hide');
+            
+            $.ajax({
+                method: "GET",
+                url: "search_user_id",
+                data: "userId=" + userId,
+                success: function (response) {
+                    $('#id').val(response.id);
+                    $('#name').val(response.name);
+                    $('#age').val(response.age);
+                }
+            }).fail(
+                function (xhr, status, errorThrown) {
+                    alert("Error while retrieving user data: " + xhr.status);
+                });
+        }
+
+
     </script>
 
     <!-- Jquery script -->
