@@ -37,8 +37,12 @@
         <!-- End of Field 3 -->
     </form>
 
+    <!-- Main Buttons in the Form -->
     <!-- Save button -->
     <button type="button" class="btn btn-primary" onclick="saveUser()">Save</button>
+
+    <!-- Edit user form button -->
+    <button type="button" class="btn btn-primary" onclick="editUser()">Edit</button>
 
     <!-- Reset form button -->
     <button type="button" class="btn btn-secondary" onclick="document.getElementById('formUserRegistering').reset()">
@@ -47,6 +51,9 @@
     <!-- Open 'Search' modal button -->
     <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#searchModal">Search user</button>
 
+    <!-- End of Main Buttons in the Form -->
+
+    <!-- Modal -->
     <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -91,6 +98,7 @@
             </div>
         </div>
     </div>
+    <!-- End of Modal -->
 
 
 
@@ -140,7 +148,7 @@
                                 + response[i].id + '</td><td>'
                                 + response[i].name + '</td><td>'
                                 + response[i].age
-                                + '</td><td><button type="button" class="btn btn-dark" onClick="onEditUser('
+                                + '</td><td><button type="button" class="btn btn-dark" onClick="onFillFormWithUserData('
                                 + response[i].id + ')">Edit</button></td></tr>');
                         }
                     }
@@ -153,10 +161,10 @@
             }
         }
 
-        function onEditUser(userId) {
-            
+        function onFillFormWithUserData(userId) {
+
             $('#searchModal').modal('hide');
-            
+
             $.ajax({
                 method: "GET",
                 url: "search_user_id",
@@ -169,6 +177,30 @@
             }).fail(
                 function (xhr, status, errorThrown) {
                     alert("Error while retrieving user data: " + xhr.status);
+                });
+        }
+
+        function editUser() {
+            var userId = $("#id").val();
+            var userName = $("#name").val();
+            var userAge = $("#age").val();
+
+            $.ajax({
+                method: "PUT",
+                url: "update",
+                data: JSON.stringify({
+                    id: userId,
+                    name: userName,
+                    age: userAge
+                }),
+                contentType: "application/json; charset-UTF-8",
+                success: function (response) {
+                    
+                    alert("User successfully updated!");
+                }
+            }).fail(
+                function (xhr, status, errorThrown) {
+                    alert("Error while registering: " + xhr.responseText);
                 });
         }
 
