@@ -35,6 +35,7 @@ public class UserResource {
     public ResponseEntity<List<User>> listUsers() {
 
         List<User> usersList = userRepository.findAll(); // Requests the database
+        
         return new ResponseEntity<List<User>>(usersList, HttpStatus.OK); // Returns the users (the object List) in JSON
     }
 
@@ -43,6 +44,7 @@ public class UserResource {
     public ResponseEntity<User> createUser(@RequestBody User user) {
 
         User createdUser = userRepository.save(user);
+        
         return new ResponseEntity<User>(createdUser, HttpStatus.CREATED);
     }
 
@@ -57,6 +59,7 @@ public class UserResource {
         }
 
         User updatedUser = userRepository.saveAndFlush(user);
+        
         return new ResponseEntity<User>(updatedUser, HttpStatus.OK);
     }
 
@@ -69,6 +72,7 @@ public class UserResource {
         }
 
         userRepository.deleteById(userId);
+        
         return new ResponseEntity<String>(
                 "User successfully deleted.",
                 HttpStatus.OK);
@@ -85,7 +89,8 @@ public class UserResource {
         }
 
         User foundUser = userRepository.findById(userId).get();
-        return new ResponseEntity<User>(foundUser, HttpStatus.FOUND);
+        
+        return new ResponseEntity<User>(foundUser, HttpStatus.OK);
     }
 
     @GetMapping(value = "search_name")
@@ -93,7 +98,8 @@ public class UserResource {
             @RequestParam(name = "inputedName") String inputedName) {
 
         List<User> usersList = userRepository.searchByInexactName(inputedName.trim().toLowerCase());
-        return new ResponseEntity<List<User>>(usersList, HttpStatus.FOUND);
+        
+        return new ResponseEntity<List<User>>(usersList, HttpStatus.OK);
     }
 
 }
