@@ -243,9 +243,7 @@
                     url: "delete",
                     data: "userId=" + userId,
                     success: function (response) {
-                        $("#id").val("");
-                        $("#name").val("");
-                        $("#age").val("");
+                        document.getElementById('formUserRegistering').reset();
                         alert(response);
                     }
                 }).fail(
